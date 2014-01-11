@@ -1,3 +1,4 @@
+//package udis implements a simple URL Dispatcher for go
 package udis
 
 import (
@@ -7,8 +8,11 @@ import (
 	"strings"
 )
 
+//the default regular expression to use if one is not provided
 const DEFAULT_REGEXP = "[a-z]*"
 
+//Router is responsible for receiving http requests and
+//routing it to appropriate handlers
 type Router struct {
 	*http.ServeMux
 	routes []Route
@@ -20,6 +24,7 @@ func (r *Router) String() {
 	}
 }
 
+//Route represents a single route which is registered with the router
 type Route struct {
 	regExpressionPattern *regexp.Regexp
 	methodType           string
@@ -31,6 +36,7 @@ func (r *Route) String() {
 	fmt.Sprintf("pattern:", r.regExpressionPattern, "methodType:", r.methodType, "handlerFunc:", r.handlerFunc)
 }
 
+//
 func (r *Route) routeMatch(request *http.Request) bool {
 
 	fmt.Println("request method type:", request.Method)
@@ -64,10 +70,11 @@ func (r *Route) populateForm(request *http.Request) error {
 }
 
 //create a new router for url dispatch
+//
 func NewRouter() *Router {
 	routes := make([]Route, 0)
 	router := &Router{http.NewServeMux(), routes}
-	router.ServeMux.HandleFunc("/", router.RoutesHandler())
+	router.ServeMux.HandleFunc("/", router.routesHandler())
 	return router
 }
 
@@ -112,19 +119,20 @@ func processPattern(pattern string) (map[string]string, string) {
 				//ignore that part
 			}
 		}
-
 	}
-	return urlParameters, pattern
+	//append ^ at the beginning and $ at the end to make exact match
+	pattern = strings.Join([]string{"^", pattern, "$"}, "")
 
+	return urlParameters, pattern
 }
 
+// Get function registers a http Handler function for a particular pattern for
+// http get Requests
 func (router *Router) Get(pattern string, f http.HandlerFunc) {
 
 	fmt.Println("pattern before:", pattern)
 	urlParams, pattern := processPattern(pattern)
 
-	//append $ to make exact match
-	pattern = "^" + pattern + "$"
 	fmt.Println("pattern after:", pattern)
 
 	regExpPattern := regexp.MustCompile(pattern)
@@ -133,19 +141,23 @@ func (router *Router) Get(pattern string, f http.HandlerFunc) {
 	router.appendRoute(route)
 }
 
+// Post function registers a http Handler function for a particular pattern for
+// http Post Requests
 func (router *Router) Post(pattern string, f http.HandlerFunc) {
 	urlParams, pattern := processPattern(pattern)
 	regExpPattern := regexp.MustCompile(pattern)
-
+	fmt.Println("pattern after:", pattern)
 	route := Route{regExpPattern, "POST", f, urlParams}
 	router.appendRoute(route)
 }
 
+// appendRoute appends all the routes to the router
 func (router *Router) appendRoute(route Route) {
 	router.routes = append(router.routes, route)
 }
 
-func (router *Router) RoutesHandler() http.HandlerFunc {
+// routesHandler accepts Http request and initiates dispatch handling logic
+func (router *Router) routesHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		handleRoutes(router, w, r)
 	}
@@ -154,10 +166,13 @@ func (router *Router) RoutesHandler() http.HandlerFunc {
 
 func handleRoutes(router *Router, writer http.ResponseWriter, request *http.Request) {
 	routeMatched := false
+
+	//for every route registered with the router, check if there is any match
 	for _, route := range router.routes {
 		if route.routeMatch(request) {
 			routeMatched = true
 			err := route.populateForm(request)
+
 			if err != nil {
 				panic(err)
 			}
