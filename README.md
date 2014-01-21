@@ -7,7 +7,7 @@ A simple URI dispatcher in Go. The standard http library has support only for St
 To provide dynamic dispatch support, Import the udis package into your project.
 
 
-    import("github.com/sriluyarlagadda/udis")
+    **import("github.com/sriluyarlagadda/udis")**
 
 
 
