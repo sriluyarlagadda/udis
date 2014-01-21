@@ -23,4 +23,6 @@ To create a HTTP Get Request handler which accepts any value of type ***value***
     func nameHandler(w http.ResponseWriter, r *http.Request) {
 	    fmt.Fprintf(w, "hello %s", r.FormValue("name"))
     }
+    
+Here the router registers the given path, associates the corresponding handler function to that particular path, the ***value*** passed in the url is append to the form values of the http request.
 
