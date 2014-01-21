@@ -51,3 +51,4 @@ We attach the router to the server through:
 1. Support for other HTTP methods (HEAD,PUT,DELETE).
 2. Default Handler which handles all request which do not match any of the routes.
 3. A middleware handler which can intercept a request and pre process the request.
+4. Add unit tests.
