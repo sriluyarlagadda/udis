@@ -17,3 +17,10 @@ Create a new Router object, this object takes care of dispatching the http reque
     
 
 To create a HTTP Get Request handler which accepts any value of type ***value***
+
+    router.Get("/:value", nameHandler)
+    
+    func nameHandler(w http.ResponseWriter, r *http.Request) {
+	    fmt.Fprintf(w, "hello %s", r.FormValue("name"))
+    }
+
