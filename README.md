@@ -38,8 +38,8 @@ Similarly, to intercept a HTTP Post request:
 
     	router.Post("/", postIndexHandler)
     	
-    	func postIndexHandler(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "hello world from http postpost")
-	}
+    func postIndexHandler(w http.ResponseWriter, r *http.Request) {
+       fmt.Fprintf(w, "hello world from http postpost")
+    }
 
 
