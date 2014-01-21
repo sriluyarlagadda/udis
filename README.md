@@ -26,3 +26,10 @@ To create a HTTP Get Request handler which accepts any value of type ***value***
     
 Here the router registers the given path, associates the corresponding handler function to that particular path, the ***value*** passed in the url is append to the form values of the http request.
 
+
+    router.Get("/:name{[a-z]*}/:newValue{[1-4]*}", complexHandler)
+    
+    func complexHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "hello %s %s times", r.FormValue("name"), r.FormValue("newValue"))
+    }
+
