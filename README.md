@@ -11,3 +11,9 @@ To provide dynamic dispatch support, Import the udis package into your project.
 
 
 
+Create a new Router object, this object takes care of dispatching the http request to handlers, based on the http method type, and the url request type.
+
+    router := udis.NewRouter()
+    
+
+To create a HTTP Get Request handler which accepts any value of type ***value***
