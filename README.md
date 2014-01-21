@@ -42,4 +42,7 @@ Similarly, to intercept a HTTP Post request:
        fmt.Fprintf(w, "hello world from http postpost")
     }
 
+We attach the router to the server through:
+    http.ListenAndServe(":8080", router)
+
 
