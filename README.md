@@ -36,7 +36,7 @@ The router supports regular expressions for the url matching and it can match mu
     
 Similarly, to intercept a HTTP Post request:
 
-    	router.Post("/", postIndexHandler)
+    router.Post("/", postIndexHandler)
     	
     func postIndexHandler(w http.ResponseWriter, r *http.Request) {
        fmt.Fprintf(w, "hello world from http postpost")
